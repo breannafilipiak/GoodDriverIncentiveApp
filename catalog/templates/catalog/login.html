@@ -1,0 +1,61 @@
+<!-- Login Page w/Form -->
+
+<!-- Formats Page from Base Template created -->
+{% extends 'base.html' %}
+
+<!-- Labels Tag on Browser "Login" -->
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+<br><br><br><br><br>
+<h1>Login</h1>
+
+
+<body>
+    <!-- Goes to the home page upon completion -->
+    
+    <form class="w3-padding-large  w3-display-middle" method="POST">
+        <br><br>
+        <!-- Helps prevent cross-site request forgeries -->
+        {% csrf_token %}
+        {% for field in form %}
+        <p>{{ field.label }}: <br> {{ field }}</p>
+        {% endfor %}
+      
+        {% if form.errors %} 
+        <div class = "alert alert-primary" role ="alert">
+            Email and Password do not match
+        </div>
+        {% endif %}
+
+        <br>
+        <div class="w3-center">
+            <!-- Login Button references "Create Accout" url -->
+            <!-- <a href="{% url 'home' %}">  -->
+                <input type="submit" class="w3-button w3-white w3-border w3-round-large " value="Login ->">
+            <!-- </a> -->
+        </div>
+        
+        
+        <p>
+            Not Registered?  
+            <!-- Create Account Button references "Create Accout" url -->
+            <a href="{% url 'create_account' %}">
+                Create Account
+            </a>
+        </p>
+
+        <p>
+            Forgot Password?  
+            <!-- Forgot password references Password Reset url -->
+            <a href="{% url 'pwdreset' %}">
+                Reset Password
+            </a>
+         </p>
+        
+    </form>
+</body>
+
+{% endblock %}

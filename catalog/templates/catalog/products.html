@@ -1,0 +1,63 @@
+{% extends 'menu_base.html' %}
+
+{% load static %}
+{% block title %}
+Products
+{% endblock %}
+
+{% block content %}
+
+<br>
+<h1>
+  Products
+</h1>
+
+<main>
+
+
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+
+      <div class="pb-3 h5">All Products</div>
+      <div class="w3-row-padding w3-padding-16 w3-center">
+    
+        {% for product in products %}
+        {% for i in user_sponsor %}
+       
+         {% for x in product.sponsored_by.all %}
+         {% if i == x %}
+          <div class="w3-quarter">
+            <div class="card shadow-sm">
+              <small class="text-muted">{{x.sponsor_org}}</small>
+              <!-- <img class="img-fluid" alt="Responsive image" src="{{ product.image.url }}"> -->
+              <div class="card-body">
+                <div class="w3-container w3-light-grey">
+                  <br><br><br><br><br><br><br><br>
+                </div>
+                <p class="card-text">
+                  <a class="text-dark text-decoration-none" href="{{ product.get_url }}">{{ product.title }}</a>
+                  <br>
+                </p>
+                
+                <hr>
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="text-muted">{{product.category}}</small>
+                  
+                </div>
+              </div>
+            </div>
+            <br><br>
+          </div>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
+
+</main>
+{% endblock %}

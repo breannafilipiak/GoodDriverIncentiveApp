@@ -1,0 +1,145 @@
+{% extends 'menu_base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+
+{% block content %}
+
+<h1>
+    Checkout
+</h1>
+
+<body>
+
+    <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px"></div>
+    <div class="container-fluid ">
+        <div class="row no-gutter">
+
+            <div class="login d-flex py-5">
+                <div class="w3-container">
+                    <div class="row">
+                        <div class="col-12 col-lg-5 mx-auto w3-card w3-round w3-white">
+                            <br>
+                            <h3 class="mb-3">Shipping Information</h3>
+                            <div class="row g-3">
+                                <div class="col-sm-7">
+                                    <h4>Customer Name</h4>
+                                    {{user.first_name}} {{user.last_name}}
+                                </div>
+                                <div class="col-12">
+                                    <h4>Email </h4>
+                                    {{user.email}}
+                                </div>
+                                <div class="col-12">
+                                    <h4>Address</h4>
+                                    {{user.driver_account.street_address}}
+                                </div>
+                                <div class="col-12">
+                                    <h4>Apartment #, suite, or P.O.Box <span class="text-muted">(Optional)</span></h4>
+                                    {{user.driver_account.address_line}}
+                                </div>
+
+                                <div class="col-md-4">
+                                    <h4>City</h4>
+                                    {{user.driver_account.state}}
+                                </div>
+
+                                <div class="col-md-4">
+                                    <h4>State</h4>
+                                    {{user.driver_account.state}}
+                                </div>
+                                <div class="col-md-3">
+                                    <h4>Zip Code</h4>
+                                    {{user.driver_account.zip_code}}
+                                </div>
+                            </div>
+                            <hr class="my-4">
+
+                        </div>
+                        <div class="w3-col m7">
+
+                            <div class="w3-row-padding">
+                                <div class="w3-col m12">
+                                    <div class="w3-card w3-round w3-white">
+                                        <div class="w3-container w3-padding">
+                                            <br>
+
+                                            <h3 class="mb-3">Payment</h3>
+                                            <!-- User Points math will appear here -->
+
+                                            <hr class="w3-clear">
+                                            {% for i in user.driver_account.sponsor.all %}
+                                            {% for item in cart %}
+                                            {% with product=item.product %}
+                                            {% for org in product.sponsored_by.all %}
+
+                                            {% if i.sponsor_org == org.sponsor_org %}
+
+                                            <div data-index="{{product.id}}"
+                                                class=" w3-display-container row mb-4 border product-item">
+                                                <div class="col-lg-10 ps-md-3 ">
+                                                    <div class="w3-display-left w3-padding pt-2"> {{org.sponsor_org}}-
+                                                        <i> {{ product.title }} </i></div>
+                                                    <div class="col border-bottom">
+                                                        <div class="w3-display-right w3-padding">
+                                                            ${{ product.price }} * {{item.qty}} <br>${{item.total}}
+                                                        </div>
+                                                        <div class="w3-display-bottom-right w3-padding"><br></div>
+                                                    </div>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                            {% endwith %}
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <div class="w3-display-bottom-right w3-padding"> ${{total_price}} </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+                            <button type="button" id="pay-button" method="POST"
+                                class="w3-button w3-white w3-border w3-round-large btn btn-primary w-100 ">Pay</button>
+                            <br>
+
+                            <br>
+                            <a href="{% url 'cart' %}"
+                                class="w3-button w3-white w3-border w3-round-large  btn btn-secondary ">
+                                Back
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br><br><br><br>
+
+    <button type="button" id = "apply-button" method = "POST" class="w3-button w3-white w3-border w3-round-large apply-button"> Apply </button>
+    </div> 
+</body>
+
+<script>
+    $(document).on('click', '.apply-button', function (e) {
+      e.preventDefault();
+      
+      $.ajax({
+        type: 'POST',
+        url: '{% url "place_order" %}',
+        data: {
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        }
+    
+      });
+      document.getElementById("apply-button").disabled = True
+      location.reload()
+    })
+  
+</script>
+{% endblock %}

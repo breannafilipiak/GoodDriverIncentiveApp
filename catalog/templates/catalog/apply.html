@@ -1,0 +1,85 @@
+{% extends 'menu_base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+
+{% block content %}
+
+<body>
+
+    <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px"></div>
+    <h3> Applications </h3>
+    <hr>
+    <h8> <i> Current application updates </i> </h8>
+    <br><br>
+    <table class="w3-table w3-bordered">
+        <tr>
+          <th><i> Sponsor </i> </th>
+          <th> <i> Status </i> </th>
+          <th> <i> Request </i></th>
+        </tr>
+        
+        <!-- Each Table Row (Info per Sponsor) -->
+        {% for orgs in all_orgs %}  
+        <tr>
+          <td>{{orgs}}</td>
+          
+          <!-- Loop through Applied to Orgs -->
+          {% for i in applied_to %}
+        
+          {% if i.apply_to == orgs %}
+            <!-- Status of Application -->
+            {% if i.is_active == True and i.accepted == False %}
+                <td> <i> Pending </i> </td>
+            {% elif i.is_active == False and i.accepted == False %}
+                <td> <i> Rejected </i> </td>
+            {% elif i.is_active == False and i.accepted == True %}
+                <td> <i> Accepted </i> </td>
+            {% endif %}
+
+            <td>
+                <input type="button" class="w3-button w3-white w3-border w3-round-large" value="Sent" disabled>
+            </td>          
+          
+          {%endif%}
+
+          {%endfor%}
+
+          {% for x in not_applied_to %}
+            {% if orgs == x %}
+             <td> <i> Not Applied </i> </td>
+             <td>
+                <button type="button" id = "apply-button" data-index="{{orgs.id}}" method = "POST" class="w3-button w3-white w3-border w3-round-large apply-button"> Apply </button>
+            </td>
+            {%endif%}
+
+            {%endfor%}
+        </tr>
+        {% endfor %}
+        
+    </table>
+    </div> 
+</body>
+
+<script>
+    $(document).on('click', '.apply-button', function (e) {
+      e.preventDefault();
+      
+      $.ajax({
+        type: 'POST',
+        url: '{% url "send_request" %}',
+        data: {
+          org_id: $(this).data('index'),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        }
+    
+      });
+      document.getElementById("apply-button").disabled = True
+      location.reload()
+    })
+  
+</script>
+{% endblock %}

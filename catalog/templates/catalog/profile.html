@@ -1,0 +1,118 @@
+{% extends 'menu_base.html' %}
+
+{% load static %}
+{% block title %}
+Profile
+{% endblock %}
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<br>
+<h1>
+    Profile
+</h1>
+
+<main>
+
+    <body>
+        <div class="container-fluid ">
+            <div class="row no-gutter">
+
+                <div class="login d-flex py-5">                    
+                        <div class="row">
+                            <div class="column">
+                                <div class="w3-col m10">
+                                    <div class="w3-row-padding">
+                                      
+                                            <div class=" w3-card w3-round w3-white">
+                                                <div class="w3-container w3-padding">
+                                                    <br>
+                                                    <h4 class="mb-3">My Account Info</h4>
+                                                    <hr>
+
+                                                    <div class="row g-3">
+                                                        <div class="col-sm-7">
+                                                            <h5> Full Name </h5> {{user.first_name}} {{user.last_name}}
+                                                            <br><br>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <h5> Email </h5> {{user.email}}
+                                                            <br>
+                                                            <br>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <h5> Status </h5>
+                                                            {% if user.is_driver %}
+                                                            Driver
+                                                            {% elif user.is_sponsor %}
+                                                            Sponsor for {{user.sponsor_account.sponsor_org}}
+                                                            {% elif user.is_superuser %}
+                                                            Admin
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <br><br>
+                            {% if user.is_driver %}
+                            <div class="column">
+                                <div class="w3-col m10">
+                                    <div class="w3-row-padding">                                        
+                                            <br>
+                                            <div class="w3-card w3-round w3-white">
+                                                <div class="w3-container w3-padding">
+                                                    <br>
+                                                    <h4 class="mb-3">Address</h4>
+                                                    <hr>
+                                                    <div class="col-12">
+                                                        <h5> Street</h5> {{user.driver_account.street_address}}
+                                                        {{user.driver_account.address_line}} <br>
+                                                        <br>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <h5> City </h5> {{user.driver_account.city}}<br>
+                                                        <br>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <h5> State </h5> {{user.driver_account.state}}<br>
+                                                        <br>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <h5> Zip </h5> {{user.driver_account.zip_code}}
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>                                        
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                        </div>
+
+                    
+                </div>
+            </div>
+        </div>
+
+            <hr>
+
+            <br>
+            <a type="button" href="{% url 'edit_profile' %}" class="btn btn-outline-secondary btn-sm update-button">
+                Edit
+            </a>
+
+
+    </body>
+
+
+</main>
+{% endblock %}

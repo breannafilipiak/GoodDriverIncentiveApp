@@ -1,0 +1,39 @@
+{% extends 'menu_base.html' %}
+
+{% load static %}
+{% block title %}
+Profile
+{% endblock %}
+
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<br>
+<h1>
+  Edit Profile
+</h1>
+
+<main>
+
+    <form method="post">
+
+        {% csrf_token %}
+        {{ edit_form|crispy }}
+        
+        <br>
+        <h4> Update Address </h4>
+        <hr>
+
+        {{ edit_addy_form|crispy }}
+
+        <br><br>
+        <input type="submit"  class="btn btn-outline-secondary btn-sm update-button" value = "Save Changes">
+
+
+        <!-- <a type="button" href="{% url 'edit_profile' %}" class="btn btn-outline-secondary btn-sm update-button">
+            Edit 
+        </a> -->
+      </form>
+</main>
+{% endblock %}

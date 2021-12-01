@@ -1,0 +1,115 @@
+{% extends 'menu_base.html' %}
+
+{% load static %}
+{% block title %} 
+    Cart
+{% endblock %}
+
+{% block content %}
+<br>
+<h1>
+    View Cart
+</h1>
+
+<main class="pt-5">
+    <div class="w3-container w3-padding">
+      {% for item in cart %}
+      {% with product=item.product %}
+      {% for org in product.sponsored_by.all %}
+      {{org.sponsor_org}}
+      <div data-index="{{product.id}}" class=" w3-display-container row mb-4 border product-item">
+        <div class="col-lg-10 ps-md-3 ">
+          <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-reset">
+            <h1 class="h5 pt-2">{{ product.title }}</h1>
+          </a>
+          <div class="border">
+            <div class="col border-bottom">
+              <div class="row p-3">
+                ${{ product.price }}  
+              </div>
+              <div class="w3-display-right w3-padding">  ${{product.price}} * {{item.qty}} </div>
+              <div class="w3-display-bottomright w3-padding">${{item.total}}</div>
+            </div>
+            <div class="col">
+              <div class="row p-3">
+                <div class="col-12">
+                  <label for="select">Qty</label>
+                  <select id="select{{product.id}}">
+                    <option selected>
+                      {{item.qty}}
+                    </option>
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                    <option value="">4</option>
+                  </select>
+                  <button type="button" id="update-button" data-index="{{product.id}}"
+                    class="btn btn-outline-secondary btn-sm update-button">
+                    Update
+                  </button>
+                  <button type="button" id="delete-button" data-index="{{product.id}}"
+                    class="btn btn-outline-secondary btn-sm delete-button">
+                    Delete
+                  </button>
+                </div>
+              </div>  
+            </div>
+          </div> 
+          <br>
+        </div> 
+      </div>
+      {% endfor %}
+      {% endwith %}
+      {% endfor %}
+      <div class="col-12 text-end">
+        <div class="h6 fw-bold">Total $<div id="subtotal" class="d-inline-flex">{{cart.total}}</div></div>
+      </div>
+
+      <a role="button" href="{% url 'checkout' %}" class="w3-button w3-white w3-border w3-round-large  btn btn-secondary" type="button">Checkout</a>
+          <button class="btn btn-light" type="button">Save for later</button>
+    </div>
+  </main>
+  <script>
+    
+    $(document).on('click', '.delete-button', function (e) {
+      e.preventDefault();
+      var prodid = $(this).data('index');
+      $.ajax({
+        type: 'POST',
+        url: '{% url "remove_from_cart" %}',
+        data: {
+          productid: $(this).data('index'),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        },
+        success: function (json) {
+          $('.product-item[data-index="' + prodid + '"]').remove();
+          document.getElementById("subtotal").innerHTML = json.subtotal;
+          document.getElementById("cart-qty").innerHTML = json.qty
+        },
+        error: function (xhr, errmsg, err) {}
+      });
+    })
+  
+    $(document).on('click', '.update-button', function (e) {
+      e.preventDefault();
+      var prodid = $(this).data('index');
+      $.ajax({
+        type: 'POST',
+        url: '{% url "update_cart" %}',
+        data: {
+          productid: $(this).data('index'),
+          productqty: $('#select' + prodid + ' option:selected').text(),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        },
+        success: function (json) {
+          document.getElementById("cart-qty").innerHTML = json.qty
+          document.getElementById("subtotal").innerHTML = json.subtotal
+        },
+        error: function (xhr, errmsg, err) {}
+      });
+    })
+  </script>
+  
+  {% endblock %}

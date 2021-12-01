@@ -1,0 +1,44 @@
+<!-- Create Account Page w/Form -->
+
+<!-- Formats Page from Base Template created -->
+{% extends 'base.html' %}
+
+<!-- Labels Tag on Browser "Create Account" -->
+{% block title %}
+    Create Account
+{% endblock %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<h1>Create Account</h1>
+<br>
+<br><br>
+
+<body>
+    <!-- Goes to the home page upon completion -->
+    <form class= "w3-padding-large  w3-display-middle" method="POST" >
+        <!-- action="{% url 'home' %}"  -->
+         <!-- Helps prevent cross-site request forgeries -->
+        {% csrf_token %}
+                
+        <br>    
+        <!-- References form created in Forms.py  -->
+        <br>{{form|crispy}}<br>
+          
+        <br>
+        <input type="submit" class="w3-button w3-white w3-border w3-round-large w3-display-bottommiddle" value="Create Account">
+        <br>
+        
+    </form>
+    
+    <!-- Back button goes back to Login Page -->
+    <a href="{% url 'login' %}" class = "btn btn-secondary w3-display-bottommiddle">
+        Back
+    </a>
+            
+</body>
+{% endblock %}
+  
+

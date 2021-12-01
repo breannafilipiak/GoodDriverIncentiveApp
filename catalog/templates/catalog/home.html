@@ -1,0 +1,159 @@
+{% extends 'menu_base.html' %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+
+{% block content %}
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+    <!-- The Grid -->
+    <div class="w3-row">
+      <!-- Left Column -->
+      <div class="w3-col m3">
+        <!-- Profile -->
+        <div class="w3-card w3-round w3-white">
+          <br>
+          <div class="w3-container">
+           <h4>Hello {{user.first_name}} </h4>
+           <br><br>
+           <p class="w3-center"><svg xmlns="http://www.w3.org/2000/svg" width="106" height="106" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+          </svg></p>
+           <br>
+           <hr>
+           <p><i class="w3-margin-right w3-text-theme">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-person-badge" viewBox="0 0 16 16">
+              <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+              <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z"/>
+            </svg></i>
+            {% if user.is_driver %}
+             Driver  
+            
+            {% elif user.is_sponsor %}
+             Sponsor
+            
+            {% elif user.is_superuser %}
+             Admin
+
+            {% endif %}
+          </p>
+            
+          </div>
+        </div>
+        <br>
+        
+              
+        
+        <!-- Interests --> 
+        <div class="w3-card w3-round w3-white ">
+          <div class="w3-container">
+            <br>
+            {% if user.is_driver %}
+            <h4>Current Points</h4>
+            <hr class="w3-clear">
+            
+            {% for i in user_point_info %} 
+             <h5> {{i.sponsor_org}} : {{i.point_total}} <small class="text-muted"> ~ ${{i.monetary_value}} (${{i.sponsor_org.point_value }}/point)</small> </h5> 
+             
+             <br>
+            {% endfor %}
+            <br>
+            
+            {% endif %}
+            
+            {% if user.is_sponsor %}
+            <h4>Sponsor Organization</h4>
+            <hr class="w3-clear">
+            {{user.sponsor_account.sponsor_org}}
+            <br><br>
+            {% endif %}
+
+          </div>
+        </div>
+        <br>
+        
+      <!-- End Left Column -->
+      </div>
+      
+      <!-- Middle Column -->
+      <div class="w3-col m7">
+      
+        <div class="w3-row-padding">
+          <div class="w3-col m12">
+            <div class="w3-card w3-round w3-white">
+              <div class="w3-container w3-padding">
+                <br>
+                <h4>Recent Point Updates</h4>
+                <hr class="w3-clear">
+                <br><br><br><br><br><br><br>
+                <a href="#">
+                    View History
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="w3-container w3-card w3-white w3-round w3-margin">
+          <br>
+          <h4>My Orders</h4>
+          <hr class="w3-clear">
+          <span class="w3-right w3-opacity">Status: </span><br><br>
+          <span class="w3-right w3-opacity">Status: </span><br><br>
+          <span class="w3-right w3-opacity">Status: </span><br><br>
+          <span class="w3-right w3-opacity">Status: </span><br><br>
+          <span class="w3-right w3-opacity">Status: </span><br><br>
+          <a href=#>
+            View Orders
+          </a>
+        </div>
+          
+      <!-- End Middle Column -->
+      </div>
+      
+      <!-- Right Column -->
+      <div class="w3-col m2">
+        <div class="w3-card w3-round w3-white">
+          <div class="w3-container">
+            <br>
+
+            {% if user.is_driver %}
+            <h4>Sponsors</h4>
+            <hr class="w3-clear">
+            {% for i in user_sponsor_info %} 
+              <h5> {{i}} </h5>
+              <hr class="my-4">
+            {% endfor %}
+            <br>
+            <a href="{% url 'apply' %}">
+              Apply for a Sponsor <br>
+            </a>
+            <br>
+            
+            {% elif user.is_sponsor %}
+            <h4>Drivers</h4>
+            <hr class="w3-clear">
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <br>
+            {% endif %}
+
+            
+          </div>
+        </div>
+        <br>      
+        
+      <!-- End Right Column -->
+      </div>
+      
+    <!-- End Grid -->
+    </div>
+    
+  <!-- End Page Container -->
+  </div>
+  <br>
+  
+
+{% endblock %}
