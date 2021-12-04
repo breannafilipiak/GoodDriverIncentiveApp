@@ -7,7 +7,8 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import MinValueValidator, DecimalValidator
-
+from auditlog.models import AuditlogHistoryField
+from auditlog.registry import auditlog
 
 # Create your models here.
 
@@ -48,6 +49,7 @@ class CustomAccountManager(BaseUserManager):
 
 
 class AllUsers(AbstractBaseUser, PermissionsMixin):
+    history = AuditlogHistoryField()
     email = models.EmailField(('email'),unique=True)
     first_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
@@ -77,9 +79,10 @@ class AllUsers(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-        
+auditlog.register(AllUsers)        
 
 class SponsorOrg(models.Model):
+    history = AuditlogHistoryField()
     sponsor_org = models.CharField(max_length=150, blank = True, unique=True)
     point_value = models.DecimalField(validators=[MinValueValidator((0))], decimal_places=2, max_digits=5, default= 0.01)
     class Meta:
@@ -88,8 +91,10 @@ class SponsorOrg(models.Model):
        
     def __str__(self):
         return self.sponsor_org
+auditlog.register(SponsorOrg)  
 
 class Sponsor(models.Model):
+    history = AuditlogHistoryField()
     user = models.OneToOneField(AllUsers, on_delete= models.CASCADE, primary_key=True, related_name = 'sponsor_account')
     sponsor_org = models.ForeignKey(SponsorOrg, max_length=150, on_delete = models.CASCADE, blank = True)
     class Meta:
@@ -99,9 +104,10 @@ class Sponsor(models.Model):
     
     def __str__(self):
         return self.user.email
-
+auditlog.register(Sponsor)  
     
 class Driver(models.Model):
+    history = AuditlogHistoryField()
     user = models.OneToOneField(AllUsers, on_delete=models.CASCADE, primary_key=True, related_name= 'driver_account')  
     sponsor = models.ManyToManyField(SponsorOrg, blank=True)   
     street_address = models.CharField(max_length=150, blank = True, default='')
@@ -121,8 +127,10 @@ class Driver(models.Model):
 
         if not sponsor_org in self.sponsor.all():
             self.sponsor.add(sponsor_org)
-        
+auditlog.register(Driver)      
+
 class Application(models.Model):
+    history = AuditlogHistoryField()
     applying = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="applying")
     apply_to = models.ForeignKey(SponsorOrg, on_delete=models.CASCADE, related_name="apply_to")
     is_active = models.BooleanField(blank=True, null=False, default=True)
@@ -147,9 +155,10 @@ class Application(models.Model):
 
     def cancel(self):
         self.is_active = False
-
+auditlog.register(Application)  
 
 class Point(models.Model):
+    history = AuditlogHistoryField()
     user = models.ForeignKey(Driver, on_delete=models.CASCADE)
     sponsor_org = models.ForeignKey(SponsorOrg, on_delete=models.CASCADE)
     point_total = models.PositiveIntegerField(default=0)
@@ -157,11 +166,11 @@ class Point(models.Model):
 
     def __str__(self):
         return self.user.user.email
-
+auditlog.register(Point)  
 
 # @receiver(post_save, sender= AllUsers)
 class Point_Update(models.Model):
-    
+    history = AuditlogHistoryField()
     user = models.ForeignKey(Driver, on_delete=models.CASCADE)
     updated_by = models.ForeignKey(Sponsor, on_delete=models.CASCADE)
     organization = models.ForeignKey(SponsorOrg, on_delete=models.CASCADE)
@@ -172,7 +181,7 @@ class Point_Update(models.Model):
     
     def __str__(self):
         return self.user.user.email
-
+auditlog.register(Point_Update)  
 
 class ProductManager(models.Manager):
     def get_queryset(self):
@@ -180,6 +189,7 @@ class ProductManager(models.Manager):
 
 # Category Model
 class Category(models.Model):
+    history = AuditlogHistoryField()
     name = models.CharField(max_length= 50, db_index= True)
     slug = models.SlugField(max_length= 50, unique= True)
     sponsor_org = models.ManyToManyField(SponsorOrg)
@@ -190,12 +200,13 @@ class Category(models.Model):
     def get_url(self):
         return reverse('category', args=[self.slug])  
     
-
     def __str__(self):
         return self.name
+auditlog.register(Category)  
 
 # Product Model
 class Product(models.Model):
+    history = AuditlogHistoryField()
     category = models.ForeignKey(Category, related_name= 'product', on_delete=models.CASCADE)
     title = models.CharField(max_length= 128)
     slug = models.SlugField(max_length= 128, unique=True)
@@ -218,8 +229,10 @@ class Product(models.Model):
     
     def __str__(self):
         return self.title
+auditlog.register(Product)  
 
 class Order(models.Model):
+    history = AuditlogHistoryField()
     user = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='order_user')
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -240,9 +253,10 @@ class Order(models.Model):
     
     def __str__(self):
         return str(self.created)
-
+auditlog.register(Order)  
 
 class OrderItem(models.Model):
+    history = AuditlogHistoryField()
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=5, decimal_places=2)
@@ -250,3 +264,5 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+auditlog.register(OrderItem)  

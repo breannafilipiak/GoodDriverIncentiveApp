@@ -65,8 +65,7 @@ def create_account(request):
             user.is_sponsor = False
             user.save()
             driver = Driver.objects.get_or_create(user=user)
-            
-            
+             
             current_site = get_current_site(request)
             subject = 'Welcome!'
             message = render_to_string('catalog/welcome_email.html', {
@@ -76,7 +75,8 @@ def create_account(request):
             })
             user.email_user(subject=subject, message=message)
             #return HttpResponse('registered succesfully and activation sent')
-            login(request, user)
+            # login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect("home")
             
     else:
