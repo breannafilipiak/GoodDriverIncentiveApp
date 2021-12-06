@@ -50,12 +50,16 @@ View Product
                                         <button type="button" id="add-button" value="{{product.id}}"
                                             class="w3-button w3-white w3-border w3-round-large  btn btn-secondary ">Add to
                                             Cart</button>
+
+                                            <a href="{% url 'user_wishlist' product.id  %}" onclick="myFunction(this)" class= "w3-button w3-round-large w3-light-grey" role="button" aria-disabled="true">
+                                                Like
+                                            </a>
+                                            
                                     </div>
                                     {% else %}
                                     <small class="text-muted">Out of Stock</small>
                                     {% endif %}
                                 </div>
-
 
                             </div>
 
@@ -86,5 +90,12 @@ View Product
             error: function (xhr, errmsg, err) {}
         });
     })
+</script>
+<script>
+    
+function myFunction(x) {
+  x.classList.toggle( "w3-button w3-round-large w3-blue");
+}
+
 </script>
 {% endblock %}

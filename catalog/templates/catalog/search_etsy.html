@@ -1,0 +1,79 @@
+{% extends 'menu_base.html' %}
+
+{% load static %}
+{% block title %}
+View Product
+{% endblock %}
+
+{% block content %}
+
+<br><br>
+
+<h2>Etsy Search</h2>
+
+<body>
+    <form id="etsy-search">
+        <input id="etsy-terms" class="w3-input w3-border w3-animate-input" type="text" style="width:30%">
+        <button class="w3-button w3-white w3-border w3-round-large apply-button">Search</button>
+    </form>
+    <br> <br>
+    
+    <div id="etsy-images"></div>
+</body>
+
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+    (function ($) {
+
+        $(document).ready(function () {
+            $('#etsy-search').bind('submit', function () {
+                api_key = "unsndypzgu46q2had3plb36y";
+                terms = $('#etsy-terms').val();
+                etsyURL = "https://openapi.etsy.com/v2/listings/active.js?keywords=" +
+                    terms + "&limit=12&includes=Images:1&api_key=" + api_key;
+
+                $('#etsy-images').empty();
+                $('<p></p>').text('Searching for ' + terms).appendTo('#etsy-result');
+
+                $.ajax({
+                    url: etsyURL,
+                    dataType: 'jsonp',
+                    success: function (data) {
+                        if (data.ok) {
+                            $('#etsy-images').empty();
+                            var $listingsContainer = $('#products__listings');
+                            if (data.count > 0) {
+                                $.each(data.results, function (i, item) {
+                                    '<div class="w3-quarter">' +
+                                    '<div class = "card-body" >'+
+                                    $("<img/>").attr("src", item.Images[0]
+                                            .url_75x75).appendTo("#etsy-images")
+                                        .wrap(
+                                            "<a href='" + item.url + "'></a>"
+                                        );
+                                    '</div>' + '</div>'                                    
+                                        $('<br><br>').appendTo('#etsy-images');
+                                    
+                                });
+                            } else {
+                                $('<p>No results.</p>').appendTo('#etsy-images');
+                            }
+                        } else {
+                            $('#etsy-images').empty();
+                            alert(data.error);
+                        }
+                    }
+                });
+
+              
+
+
+
+                return false;
+            })
+        });
+
+    })(jQuery);
+</script>
+{% endblock %}

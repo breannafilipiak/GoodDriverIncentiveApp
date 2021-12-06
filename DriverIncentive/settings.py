@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'pinax.blog',
     'pinax.images',
     'useraudit',
+    'django_extensions',
 
     ]
 
@@ -124,6 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -148,6 +150,9 @@ STATIC_ROOT= 'static'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ETSY_BASE_URL = 'https://openapi.etsy.com/v2'
+ETSY_API_KEY = 'unsndypzgu46q2had3plb36y'
 
 AUTH_USER_MODEL = 'catalog.AllUsers'
 LOGIN_REDIRECT_URL = '/'

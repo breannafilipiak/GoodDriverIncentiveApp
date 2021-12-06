@@ -7,13 +7,13 @@ Home
 
 {% block content %}
 
-<h1>
-    Checkout
-</h1>
 
 <body>
 
-    <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px"></div>
+    <div class="w3-container w3-content" style="max-width:1400px;margin-top:40px"></div>
+    <h1>
+        Checkout
+    </h1>
     <div class="container-fluid ">
         <div class="row no-gutter">
 
@@ -22,7 +22,11 @@ Home
                     <div class="row">
                         <div class="col-12 col-lg-5 mx-auto w3-card w3-round w3-white">
                             <br>
-                            <h3 class="mb-3">Shipping Information</h3>
+                            <h3 class="mb-3"> <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-mailbox" viewBox="0 0 16 16">
+                                <path d="M4 4a3 3 0 0 0-3 3v6h6V7a3 3 0 0 0-3-3zm0-1h8a4 4 0 0 1 4 4v6a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V7a4 4 0 0 1 4-4zm2.646 1A3.99 3.99 0 0 1 8 7v6h7V7a3 3 0 0 0-3-3H6.646z"/>
+                                <path d="M11.793 8.5H9v-1h5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.354-.146l-.853-.854zM5 7c0 .552-.448 0-1 0s-1 .552-1 0a1 1 0 0 1 2 0z"/>
+                              </svg> Shipping Information</h3> 
+                              <h6> <span class="text-muted"><i> Default from Profile </i></span> </h6>
                             <div class="row g-3">
                                 <div class="col-sm-7">
                                     <h4>Customer Name</h4>
@@ -57,6 +61,10 @@ Home
                             </div>
                             <hr class="my-4">
 
+                            <a type="button" href="{% url 'edit_profile' %}" class="btn btn-outline-secondary btn-sm update-button">
+                                Edit Address 
+                            </a>
+
                         </div>
                         <div class="w3-col m7">
 
@@ -68,7 +76,7 @@ Home
 
                                             <h3 class="mb-3">Payment</h3>
                                             <!-- User Points math will appear here -->
-
+                                           
                                             <hr class="w3-clear">
                                             {% for i in user.driver_account.sponsor.all %}
                                             {% for item in cart %}
@@ -102,11 +110,8 @@ Home
                                 </div>
                             </div>
 
-                            <hr class="my-4">
-                            <button type="button" id="pay-button" method="POST"
-                                class="w3-button w3-white w3-border w3-round-large btn btn-primary w-100 ">Pay</button>
-                            <br>
-
+                            <hr class="my-4">                            
+                            <a href="{% url 'place_order' %}" id = "apply-button" method = "POST" class="w3-button w3-white w3-border w3-round-large btn btn-primary w-100 apply-button" role = "button"> Order </a>
                             <br>
                             <a href="{% url 'cart' %}"
                                 class="w3-button w3-white w3-border w3-round-large  btn btn-secondary ">
@@ -120,7 +125,7 @@ Home
         </div>
     </div><br><br><br><br>
 
-    <button type="button" id = "apply-button" method = "POST" class="w3-button w3-white w3-border w3-round-large apply-button"> Apply </button>
+    
     </div> 
 </body>
 
@@ -137,8 +142,6 @@ Home
         }
     
       });
-      document.getElementById("apply-button").disabled = True
-      location.reload()
     })
   
 </script>

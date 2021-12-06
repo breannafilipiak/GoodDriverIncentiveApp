@@ -54,6 +54,8 @@ urlpatterns = [
     path('checkout/', views.checkout, name = 'checkout'),
     path('send_request/', views.send_application_request, name = 'send_request'),
     path('place_order/', views.place_order, name = 'place_order'),
-    
-   
+    path('search_etsy/', views.search_etsy, name = 'search_etsy'),
+    path("wishlist/", views.wishlist, name="wishlist"),
+    path("wishlist/add_to_wishlist/<int:id>", views.add_to_wishlist, name="user_wishlist"),
+    path("all_updates", views.all_updates, name="all_updates"),
 ]

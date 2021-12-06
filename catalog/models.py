@@ -220,6 +220,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now= True)
     objects = models.Manager()
     products = ProductManager()
+    users_wishlist = models.ManyToManyField(Driver, related_name="user_wishlist", blank=True)
 
     class Meta:
         verbose_name_plural = 'Products'

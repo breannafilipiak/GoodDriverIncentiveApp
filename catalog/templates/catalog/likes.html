@@ -1,0 +1,39 @@
+{% extends 'menu_base.html' %}
+{% block title %}Users Likes{% endblock %}
+
+{% block content %}
+<br><br>
+<div class="col-12 mx-auto">
+  <h1 class="h3">My Likes</h1>
+  <div>Manage your Likes</div>
+  <hr />
+
+  <div class="w3-row-padding w3-padding-16 w3-center">
+  {% if wishlist %}
+  {% for product in wishlist  %}
+
+   
+    <div class="w3-quarter">
+        <div class="card shadow-sm">
+        <small class="text-muted">{{product.sponsor_org}}</small>
+        <div class="card-body">
+           <div class="w3-container w3-light-grey">
+               <br><br><br><br><br><br><br><br>
+           </div>
+          <h5 class="card-title">{{product.title}}</h5>
+          <p class="card-text">{{product.description}}</p>
+          <p class="card-text"><small class="text-muted">{{product.category}}: ${{product.price}}</small></p>
+          <a type="button" class="btn btn-primary fw500 btn-sm" href="{% url 'user_wishlist' product.id %}">Unlike</a>
+        </div>
+        </div>
+    </div>
+  
+
+  {% endfor %}
+  {% else %}
+  </div>
+  <p class="card-text">You have not liked anything yet</p>
+  {% endif %}
+
+</div>
+{% endblock %}

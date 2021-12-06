@@ -72,7 +72,6 @@ class EtsyAPI:
         return id_list
 
 
-
     """
     function to retrieve metadata regarding a specific listing
     
