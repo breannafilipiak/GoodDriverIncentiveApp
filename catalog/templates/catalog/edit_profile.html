@@ -22,10 +22,12 @@ Profile
         {{ edit_form|crispy }}
         
         <br>
+        {% if user.is_driver %}
         <h4> Update Address </h4>
         <hr>
 
         {{ edit_addy_form|crispy }}
+        {% endif %}
 
         <br><br>
         <input type="submit"  class="btn btn-outline-secondary btn-sm update-button" value = "Save Changes">

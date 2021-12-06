@@ -23,6 +23,7 @@ def home(request):
     
     user_sponsor_info = []
     user_point_info = []
+    some_updates = []
 
     if user.is_driver:
         applied_to = Application.objects.all().filter(applying = user.driver_account)
@@ -137,16 +138,27 @@ def profile(request):
 @login_required(login_url='login')
 def edit_profile(request):
     if request.method == 'POST':
-        edit_form = Edit_User_Info_Form(request.POST, instance=request.user)
-        edit_addy_form = Address_Form(request.POST, instance=request.user.driver_account)
-        
-        if edit_form.is_valid() and edit_addy_form.is_valid():
-            edit_form.save()
-            edit_addy_form.save()
-            return redirect("profile")
+        if request.user.is_driver:
+            edit_form = Edit_User_Info_Form(request.POST, instance=request.user)
+            edit_addy_form = Address_Form(request.POST, instance=request.user.driver_account)
+            
+            if edit_form.is_valid() and edit_addy_form.is_valid():
+                edit_form.save()
+                edit_addy_form.save()
+                return redirect("profile")
+        else:
+          edit_form = Edit_User_Info_Form(request.POST, instance=request.user)
+          edit_addy_form = None  
+          if edit_form.is_valid():
+              edit_form.save()
+              return redirect("profile")
     else:
-        edit_form = Edit_User_Info_Form(instance=request.user)
-        edit_addy_form = Address_Form(instance=request.user.driver_account)
+          if request.user.is_driver:
+            edit_form = Edit_User_Info_Form(instance=request.user)
+            edit_addy_form = Address_Form(instance=request.user.driver_account)
+          else:
+            edit_form = Edit_User_Info_Form(instance=request.user)
+            edit_addy_form = None
 
     return render(request, 'catalog/edit_profile.html', {'edit_form': edit_form , 'edit_addy_form': edit_addy_form})
     
