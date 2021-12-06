@@ -20,11 +20,13 @@ from django.contrib import admin
 from django.urls import path
 from catalog import views
 from catalog.forms import (PwdResetConfirmForm, PwdResetForm)
-
+from django.conf.urls import url
+from django.urls import path, include
 # from catalog.views import login_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^su/', include('django_su.urls')),
     path('', views.home, name = 'home'),
     path('login/', login_view.as_view(template_name = 'catalog/login.html'), name='login'),
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name="catalog/password_reset.html",

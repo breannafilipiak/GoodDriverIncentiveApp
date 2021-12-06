@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_su',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -98,9 +99,13 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = (
     'useraudit.password_expiry.AccountExpiryBackend',
+    'django_su.backends.SuBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'useraudit.backend.AuthFailedLoggerBackend'
+    'useraudit.backend.AuthFailedLoggerBackend',
+    
 )
+
+AJAX_LOOKUP_CHANNELS = {'django_su':  dict(model='auth.user', search_field='email')}
 
 LOGIN_FAILURE_LIMIT = 3
 ACCOUNT_EXPIRY_DAYS = 100

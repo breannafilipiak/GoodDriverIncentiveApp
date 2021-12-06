@@ -18,7 +18,7 @@
               <hr class="w3-clear">
               {% for i in all_point_updates %}
                <i> {{i.updated}} </i> <br>
-                {{i.point_change}} Points from {{i.organization}} <br>
+                {{i.point_change}} Points for {{i.organization}} <br>
                  Updated By: {{i.updated_by.user}}<br> 
                 Comment From: {{i.updated_by.user.first_name}} {{i.updated_by.user.last_name}}: " {{i.reason}} "
                 <hr>

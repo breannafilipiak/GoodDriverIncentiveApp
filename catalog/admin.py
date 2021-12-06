@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Category, Product, AllUsers, Driver, Sponsor, SponsorOrg, Application, Point_Update, Point, Order, OrderItem
 
+from django.contrib.auth.admin import UserAdmin
 
 
 
@@ -21,7 +22,6 @@ class Application_Config(admin.ModelAdmin):
     list_display = ['applying', 'apply_to', 'is_active', 'accepted']
     list_filter = ['accepted', 'is_active']
     search_fields = ['applying__user__email', 'apply_to__sponsor_org']
-# Register your models here.
 
 @admin.register(Category)
 class Category_Config(admin.ModelAdmin):
